@@ -1,3 +1,4 @@
+import info.gridworld.actor.Actor;
 import info.gridworld.grid.Grid;
 import info.gridworld.grid.Location;
 
@@ -7,8 +8,8 @@ import java.util.ArrayList;
 
 public class TeamName extends PaintBallCritter {
 	
-	//Test
-
+	//Check to see if a mine can blow you up before you move
+	
 	private final Color firstColor;
 
 	public TeamName(Color c) {
@@ -19,6 +20,7 @@ public class TeamName extends PaintBallCritter {
 
 	@Override
 	public void makeMove(Location loc) {
+		dropMine();
 		Location startingLoc = getLocation();
 
 		if (loc == getLocation())
@@ -31,7 +33,17 @@ public class TeamName extends PaintBallCritter {
 			rock.putSelfInGrid(getGrid(), startingLoc);
 		}
 		
+	}
+
+	private void dropMine() {
+		ArrayList<Actor> actors = getActors();
 		
+		for(Actor a : actors) {
+			if(!(a instanceof TeflonRock && a.getColor().equals(firstColor))) {
+				Mine mine = new Mine();
+				mine.putSelfInGrid(a.getGrid(), a.getLocation());
+			}
+		}
 	}
 
 	@Override
